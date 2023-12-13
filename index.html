@@ -3,9 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Ordena Bloques en Formato MLA - AMLA 80</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #4CAF50; /* Fondo verde */
+            font-family: 'Arial', sans-serif; /* Cambia la fuente si lo deseas */
+            color: #000; /* Cambia el color del texto a negro */
+        }
+
+        #container {
+            text-align: center;
+        }
+
+        /* Estilo para ocultar los bloques después de la verificación */
+        #blockSorting, #welcomeMessage, #errorMessage {
+            display: block;
+        }
+
+        #welcomeMessage, #errorMessage {
+            display: none;
+        }
+
+        .sortable {
+            cursor: move;
+            margin: 10px 0;
+            background-color: #eee; /* Cambia el color de fondo de los bloques */
+            padding: 10px;
+            border-radius: 5px; /* Agrega bordes redondeados a los bloques */
+        }
+
+        button {
+            background-color: #4CAF50; /* Cambia el color de fondo del botón */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px; /* Agrega bordes redondeados al botón */
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Cambia el color de fondo del botón al pasar el ratón */
+        }
+
+        /* Agregamos un estilo para el botón de retroceso */
+        #backButton {
+            background-color: #008CBA; /* Color de fondo azul */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px; /* Bordes redondeados */
+            cursor: pointer;
+        }
+
+        #backButton:hover {
+            background-color: #00587a; /* Cambia el color de fondo al pasar el ratón */
+        }
+    </style>
+    <!-- Agregar la referencia a jQuery y jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <body>
-    <h1>Hello, World!</h1>
+
+    <div id="container">
+        <div id="blockSorting">
+            <h1>Mueve los Siguientes Bloques en Orden según Formato MLA</h1>
+            <div id="sortableContainer">
+                <div class="sortable" id="block1">Amla Student</div>
+                <div class="sortable" id="block2">Professor Casian</div>
+                <div class="sortable" id="block3">AMLA 80</div>
+                <div class="sortable" id="block4">13 December 2023</div>
+            </div>
+            <button type="button" onclick="verifyOrder()">Verificar</button>
+        </div>
+
+        <div id="welcomeMessage">
+            <h1>¡Bien hecho!</h1>
+            <p>By the way, taking AMLA 80 classes will be a lot of fun!</p>
+            <button id="backButton" onclick="goBack()">Volver al Sorteo</button>
+        </div>
+
+        <div id="errorMessage">
+            <h1>Oh no...</h1>
+            <p>You should take AMLA 80 classes.</p>
+            <button id="backButton" onclick="goBack()">Volver al Sorteo</button>
+        </div>
+    </div>
+
+    <script>
+        // Función para desordenar aleatoriamente los bloques
+        function shuffleBlocks() {
+            var blocks = $(".sortable");
+            for (var i = blocks.length; i > 0; i--) {
+                var j = Math.floor(Math.random() * i);
+                blocks.parent().append(blocks.splice(j, 1));
+            }
+        }
+
+        // Función para volver al sorteo de bloques
+        function goBack() {
+            document.getElementById("blockSorting").style.display = "block";
+            document.getElementById("welcomeMessage").style.display = "none";
+            document.getElementById("errorMessage").style.display = "none";
+
+            // Desordenar los bloques y agregarlos nuevamente al contenedor
+            shuffleBlocks();
+        }
+
+        // Inicializar la funcionalidad de ordenar con la biblioteca jQuery UI
+        $(function () {
+            // Desordenar los bloques y agregarlos al contenedor
+            shuffleBlocks();
+
+            // Inicializar la funcionalidad de ordenar con la biblioteca jQuery UI
+            $("#sortableContainer").sortable();
+        });
+
+        function verifyOrder() {
+            // Obtener el orden actual de los bloques
+            var order = $("#sortableContainer").sortable("toArray");
+
+            // Verificar si los bloques están en el orden correcto
+            if (isOrderCorrect(order)) {
+                // Ocultar los bloques y mostrar el mensaje de bienvenida
+                document.getElementById("blockSorting").style.display = "none";
+                document.getElementById("welcomeMessage").style.display = "block";
+            } else {
+                // Ocultar los bloques y mostrar el mensaje de error
+                document.getElementById("blockSorting").style.display = "none";
+                document.getElementById("errorMessage").style.display = "block";
+            }
+        }
+
+        function isOrderCorrect(order) {
+            // Verificar si los bloques están en el orden correcto
+            return (
+                order.indexOf("block1") < order.indexOf("block2") &&
+                order.indexOf("block2") < order.indexOf("block3") &&
+                order.indexOf("block3") < order.indexOf("block4")
+            );
+        }
+    </script>
+
 </body>
 </html>
